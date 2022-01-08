@@ -408,9 +408,9 @@ const safety_hooks volkswagen_mqb_hooks = {
 
 // Volkswagen PQ35/PQ46/NMS platforms
 const safety_hooks volkswagen_pq_hooks = {
-  .init = volkswagen_pq_init,
-  .rx = volkswagen_pq_rx_hook,
-  .tx = volkswagen_pq_tx_hook,
-  .tx_lin = nooutput_tx_lin_hook,
-  .fwd = volkswagen_fwd_hook,
+  .init = alloutput_init,
+  .rx = default_rx_hook,
+  .tx = alloutput_tx_hook,
+  .tx_lin = alloutput_tx_lin_hook,
+  .fwd = default_fwd_hook,
 };
