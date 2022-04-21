@@ -193,7 +193,7 @@ class Panda(object):
 
   def __init__(self, serial: Optional[str]=None, claim=True):
     self._serial: Optional[str] = serial
-    self._handle = None
+    self._handle: usb1.USBDeviceHandle = None # can set type because self.connect asserts it. 
     self.connect(claim)
     self._mcu_type = self.get_mcu_type()
 
@@ -233,7 +233,7 @@ class Panda(object):
       if not wait or self._handle is not None:
         break
       context = usb1.USBContext()  # New context needed so new devices show up
-    assert(self._handle is not None)
+    assert(isinstance(self._handle, usb1.USBDeviceHandle))
     self.health_version, self.can_version = self.get_packets_versions()
     print("connected")
 
