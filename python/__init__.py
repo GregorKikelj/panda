@@ -8,6 +8,7 @@ import time
 import traceback
 import sys
 from functools import wraps
+from typing import List, Optional
 from .dfu import PandaDFU, MCU_TYPE_F2, MCU_TYPE_F4, MCU_TYPE_H7  # pylint: disable=import-error
 from .flash_release import flash_release  # noqa pylint: disable=import-error
 from .update import ensure_st_up_to_date  # noqa pylint: disable=import-error
@@ -190,8 +191,8 @@ class Panda(object):
   FLAG_TESLA_POWERTRAIN = 1
   FLAG_TESLA_LONG_CONTROL = 2
 
-  def __init__(self, serial=None, claim=True):
-    self._serial = serial
+  def __init__(self, serial: Optional[str]=None, claim=True):
+    self._serial: Optional[str] = serial
     self._handle = None
     self.connect(claim)
     self._mcu_type = self.get_mcu_type()
@@ -342,7 +343,7 @@ class Panda(object):
     return True
 
   @staticmethod
-  def list():
+  def list() -> List[Optional[str]]:
     context = usb1.USBContext()
     ret = []
     try:
@@ -402,7 +403,7 @@ class Panda(object):
     return self._handle.controlRead(Panda.REQUEST_IN, 0xd6, 0, 0, 0x40).decode('utf8')
 
   @staticmethod
-  def get_signature_from_firmware(fn):
+  def get_signature_from_firmware(fn) -> bytes:
     f = open(fn, 'rb')
     f.seek(-128, 2)  # Seek from end of file
     return f.read(128)
@@ -470,7 +471,7 @@ class Panda(object):
     assert(hashsig == calc_hash)
     return [dat[0:0x10].decode("utf8"), dat[0x10:0x10 + 10].decode("utf8")]
 
-  def get_usb_serial(self):
+  def get_usb_serial(self) -> Optional[str]:
     return self._serial
 
   def get_secret(self):
